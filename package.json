@@ -17,7 +17,9 @@
     "react-scripts": "3.4.1",
     "reactstrap": "8.4.1",
     "redux": "4.0.5",
-    "react-redux-form": "1.16.14"
+    "react-redux-form": "1.16.14",
+    "redux-thunk": "2.3.0",
+    "redux-logger": "3.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
