@@ -1,38 +1,49 @@
 import React from "react";
 import {
   Card, CardImg, CardText, CardBody,
-  CardTitle, Breadcrumb, BreadcrumbItem, Media, Button
+  CardTitle, Breadcrumb, BreadcrumbItem, Media
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import CommentFormComponent from './CommentFormComponent';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 function RenderDish({ dish }) {
-  return (<Card>
-    <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
-    <CardBody>
-      <CardTitle>{dish.name}</CardTitle>
-      <CardText>{dish.description}</CardText>
-    </CardBody>
-  </Card>
+  return (
+    <FadeTransform
+      in
+      transformProps={{
+        exitTransform: 'scale(0.5) translateY(-50%)'
+      }}>
+      <Card>
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+        <CardBody>
+          <CardTitle>{dish.name}</CardTitle>
+          <CardText>{dish.description}</CardText>
+        </CardBody>
+      </Card>
+    </FadeTransform>
   )
 }
 
-function RenderComments({ comments, addComment, dishId }) {
-  return comments.map(comment => {
-    const timestamp = new Date(comment.date);
-    const date = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(timestamp);
-    return (
-      <div key="comment.id">
-        <Media tag="li">
-          <Media body>
-            <p>{comment.comment}</p>
-            <p>-- {comment.author}, {date}</p>
-          </Media>
-        </Media>
-      </div>
-    )
-  });
+function RenderComments({ comments }) {
+  return (
+    <Stagger in>
+      {comments.map((comment) => {
+        return (
+          <Fade in>
+            <li key={comment.id}>
+              <p>{comment.comment}</p>
+              <p>-- {comment.author} , {new Intl.DateTimeFormat('en-US',
+                { year: 'numeric', month: 'short', day: '2-digit' })
+                .format(new Date(Date.parse(comment.date)))}</p>
+            </li>
+          </Fade>
+        );
+      })}
+    </Stagger>
+  );
 }
 
 const DishDetail = (props) => {
@@ -54,7 +65,6 @@ const DishDetail = (props) => {
       </div>
     );
   } else if (props.dish != null) {
-    const dish = props.dish;
     return (
       <div className="container">
         <div className="row">
@@ -74,8 +84,7 @@ const DishDetail = (props) => {
           </div>
           <div className="col-12 col-md-5 m-1">
             <RenderComments comments={props.comments} />
-            <CommentFormComponent buttonLabel="Submit Feedback" addComment={props.addComment}
-              dishId={props.dish.id} />
+            <CommentFormComponent buttonLabel="Submit Feedback" dishId={props.dish.id} postComment={props.postComment} />
           </div>
         </div>
       </div>

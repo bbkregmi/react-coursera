@@ -1,7 +1,7 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter,  Row, Col, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Label } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 
 
@@ -42,7 +42,7 @@ export class CommentFormComponent extends Component {
   }
 
   handleSubmit(values) {
-    this.props.addComment(this.props.dishId, values.rating, values.name, values.comment);
+    this.props.postComment(this.props.dishId, values.rating, values.name, values.comment);  
   }
 
   toggle() {
@@ -50,7 +50,6 @@ export class CommentFormComponent extends Component {
       isModalOpen: !this.state.isModalOpen
     });
   }
-
 
   render() {
 
